@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en" data-framework="backbonejs">
+	
+	<head>
+		<meta charset="utf-8">
+		<title>Backbone.js • TodoMVC</title>
+		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
+		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
+	</head>
+
+	<body>
+		<section id="todoapp">
+			<header id="header">
+				<h1><a href='/#'>todos</a></h1>
+				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+				<hr>
+				<label for='datepicker'>Para cuándo?</label>
+				<input id='datepicker' type='date'>
+				<div id='categoryWrapper'>
+					<select id='categories'>
+						<option value='normal'>Normal</option>
+						<option value="importante">Importante</option>
+						<option value="urgente">Urgente</option>
+					</select>
+				</div>
+				<div id='users'>
+					<!-- template select users -->
+				</div>
+				<a href='#editUsers' id='btnShowUsers'>Show users</a>
+			</header>
+			<section id="main">
+				<input id="toggle-all" type="checkbox">
+				<label for="toggle-all">Mark all as complete</label>
+				<ul id="todo-list"></ul>
+			</section>
+			<footer id="footer"></footer>
+		</section>
+
+		<div id='editWindowWrapper'>
+			<div id='editWindow'></div>
+		</div>
+
+		<div id='editUsersWrapper'>
+			<div id='usersWindow'></div>
+		</div>
+
+		
+
+		<!-- USERS TEMPLATE -->
+		<script type='text/template' id='user-list-template'>
+			<button class='btnCloseUsers'>X</button>
+			<input type='text' id='inputNewUser' placeholder='New user' autofocus>
+			<br>
+			<button id='btnCreateUser'>Create user</button>
+			<hr>
+			<ul id='user-ul'></ul>
+		</script>
+
+		<!-- USER (just one) TEMPLATE -->
+		<script type='text/template' id='user-item-template'>
+			<%= name %>
+			<button class='destroy'>Delete</button>
+		</script>
+
+		<!-- EDIT TEMPLATE -->
+		<script type='text/template' id='item-edit'>
+			<div class='itemEdit'>
+				<div class='btnCloseEdit'><a href='#edit'>X</a></div>
+				<p>Id: <%= id %></p>
+				<input type='text' id='title' value='<%= title %>'>
+				<label for='editDatepicker'>Para cuándo?</label>
+				<input id='editDatepicker' type='date' value='<%= moment.unix(date).format('YYYY-MM-DD') %>'>
+				<div id='categoryWrapper'>
+					<select id='editCategories'>
+
+						<option value='normal'
+							<% if (category == "normal") { %> selected='selected' <% } %>
+							>Normal
+						</option>
+
+						<option value="importante"
+							<% if (category == "importante") { %> selected='selected' <% } %>
+							>Importante
+						</option>
+
+						<option value="urgente"
+							<% if (category == "urgente") { %> selected='selected' <% } %>
+						>Urgente</option>
+
+					</select>
+				</div>
+				<button id='btnSaveEdit'>Salvar</button>
+				<a id='btnCancelEdit' href='#edit'>Cancelar</a>
+			</div>
+		</script>
+		
+		<!-- ITEM TEMPLATE -->
+		<script type="text/template" id="item-template">
+			<div class="view">
+				<div class='category <%= category %>'></div>
+				<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
+				<label><%- title %></label>
+				<button class="destroy"></button>
+				<br>
+				<p class='date'><%= moment.unix(date).format('DD/MM/YYYY') %></p>
+				
+				<p class='users'> <%= name %></p>
+
+				<a class='btnEdit' href='#edit/<%= cid %>'>Edit</a>
+			</div>
+			<input class="edit" value="<%- title %>">
+		</script>
+
+		<!-- STATS TEMPLATE -->
+		<script type="text/template" id="stats-template">
+			<span id="todo-count"><strong><%= remaining %></strong> <%= remaining === 1 ? 'item' : 'items' %> left</span>
+			<ul id="filters">
+				<li>
+					<a class="selected" href="#/">All</a>
+				</li>
+				<li>
+					<a href="#/active">Active</a>
+				</li>
+				<li>
+					<a href="#/completed">Completed</a>
+				</li>
+			</ul>
+			<% if (completed) { %>
+			<button id="clear-completed">Clear completed (<%= completed %>)</button>
+			<% } %>
+
+			<br>
+			<br>
+			<br>
+			<br>
+
+			<select id='orderBy'>
+				<option value='order'>Order asc</option>
+				<option value='reverseOrder'>Order desc</option>
+				<option value='date'>By date asc</option>
+				<option value='reverseDate'>By date desc</option>
+			</select>
+			<br>
+			<br>
+			<select id='orderByCategories'>
+				<option value='none'>Categories</option>
+				<option value='catAsc'>Asc</option>
+				<option value="catDesc">Desc</option>
+			</select>
+			<button id='orderReverseString'>Order string</button>
+		</script>
+		<script src="node_modules/jquery/dist/jquery.js"></script>
+		<script src="node_modules/moment.js"></script>
+		<script src="node_modules/underscore/underscore.js"></script>
+		<script src="node_modules/backbone/backbone.js"></script>
+		<script src="node_modules/backbone.localstorage/backbone.localStorage.js"></script>
+		<script src="js/beforeLoad.js"></script>
+		<script src="js/models/todo.js"></script>
+		<script src="js/models/user.js"></script>
+		<script src="js/collections/todos.js"></script>
+		<script src="js/collections/users.js"></script>
+		<script src="js/views/todo-view.js"></script>
+		<script src="js/views/app-view.js"></script>
+		<script src="js/views/edit-view.js"></script>
+		<script src="js/views/users-view.js"></script>
+		<script src="js/views/user-view.js"></script>
+		<script src="js/views/user-select-view.js"></script>
+		<script src="js/routers/router.js"></script>
+		<script src="js/app.js"></script>
+	</body>
+</html>
